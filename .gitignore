@@ -1,0 +1,4 @@
+key.super.txt
+settings.json
+*.credentials.json
+.credentials.json

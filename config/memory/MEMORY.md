@@ -1,0 +1,3 @@
+- [Làm việc bằng tiếng Việt](lam-viec-bang-tieng-viet.md) — trả lời tiếng Việt, giữ thuật ngữ kỹ thuật tiếng Anh.
+- [Máy không có Python](may-khong-co-python.md) — python3.exe chỉ là stub Store; hook/script phải viết bằng PowerShell.
+- [GitHub đã kết nối](github-da-ket-noi.md) — gh CLI + account luongcung223, HTTPS qua `gh auth git-credential`.

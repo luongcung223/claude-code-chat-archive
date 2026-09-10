@@ -19,7 +19,8 @@ Môi trường mục tiêu: **Windows PowerShell 5.1**, không có Python, khôn
 
 - `transcripts/jsonl/` — bản gốc đã redact
 - `transcripts/markdown/` — bản dễ đọc, tool call và thinking gập trong `<details>`
-- `config/` — `CLAUDE.md` và thư mục `memory/`
+- `config/` — `CLAUDE.md` và `memory/<tên-project>/` (tách theo project: mỗi project của
+  Claude Code có `MEMORY.md` riêng, gộp phẳng sẽ ghi đè lẫn nhau)
 - `README.md` và `.gitignore`
 
 **Redaction:** quét và thay thế 6 mẫu — Anthropic key (`sk-ant-…`), GitHub token
@@ -27,7 +28,7 @@ Môi trường mục tiêu: **Windows PowerShell 5.1**, không có Python, khôn
 in ra số chuỗi đã thay.
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File "$HOME\chat-archive\scripts\build-archive.ps1"
+powershell -ExecutionPolicy Bypass -File "C:\work\chat-archive\scripts\build-archive.ps1"
 ```
 
 > ⚠️ **Script ghi đè.** `transcripts/`, `config/`, `README.md`, `.gitignore` bị xoá và
@@ -43,7 +44,9 @@ powershell -ExecutionPolicy Bypass -File "$HOME\chat-archive\scripts\build-archi
   thường, connection string, khoá riêng dán vào chat) sẽ **lọt qua**. Đây là lưới lọc,
   không phải bảo đảm.
 - Đường dẫn máy, tên file cá nhân và chi tiết cấu hình **không** bị redact.
-- Đường dẫn home bị hard-code ở dòng 4 (`$Home2`), không dùng `$env:USERPROFILE`.
+- ~~Đường dẫn home bị hard-code ở dòng 4 (`$Home2`)~~ — đã sửa 10/09/2026 khi dời repo về
+  `C:\work\`: script dùng `$env:USERPROFILE` cho `.claude\projects` và `$PSScriptRoot` để tự
+  định vị repo, nên di chuyển repo không còn làm hỏng script.
 
 ---
 
@@ -56,7 +59,7 @@ Chủ động **loại trừ**: `*.key` (peerToken), keypair E2EE, `ai-vault/`, 
 và mask biến môi trường có tên khớp `key|token|secret|password|credential|auth`.
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File "$HOME\chat-archive\scripts\thu-thap-log-claude-orca.ps1"
+powershell -ExecutionPolicy Bypass -File "C:\work\chat-archive\scripts\thu-thap-log-claude-orca.ps1"
 ```
 
 > 🔴 **Bundle sinh ra KHÔNG an toàn để công khai.** Khác với `build-archive.ps1`, script
@@ -75,7 +78,7 @@ powershell -ExecutionPolicy Bypass -File "$HOME\chat-archive\scripts\thu-thap-lo
 Ghi cấu hình vào `%APPDATA%\orca\profiles\local-default\orca-data.json`.
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File "$HOME\chat-archive\scripts\sua-orca.ps1"
+powershell -ExecutionPolicy Bypass -File "C:\work\chat-archive\scripts\sua-orca.ps1"
 ```
 
 > ⚠️ **Phải tắt hẳn Orca trước khi chạy**, kể cả icon ở khay hệ thống. Orca giữ cấu hình

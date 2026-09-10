@@ -1,9 +1,10 @@
 ﻿$ErrorActionPreference = 'Stop'
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
-$Home2    = "C:\Users\Cung Đức Lương"
-$Projects = Join-Path $Home2 ".claude\projects"
-$Out      = Join-Path $Home2 "chat-archive"
+# Khong hardcode duong dan home co dau tieng Viet.
+# $Out = thu muc cha cua scripts/ -> repo tu dinh vi, khong hong khi di chuyen.
+$Projects = Join-Path $env:USERPROFILE ".claude\projects"
+$Out      = Split-Path -Parent $PSScriptRoot
 
 # Dọn sạch rồi tạo lại cây thư mục.
 #
@@ -216,9 +217,31 @@ Get-ChildItem -Path $Projects -Directory | ForEach-Object {
 }
 
 # --- config -------------------------------------------------------------
-Copy-Item "$Home2\.claude\CLAUDE.md" "$Out\config\CLAUDE.md" -Force
-Get-ChildItem "$Projects\C--Users-Cung---c-L--ng\memory" -Filter '*.md' -File |
-  ForEach-Object { Copy-Item $_.FullName "$Out\config\memory\$($_.Name)" -Force }
+Copy-Item "$env:USERPROFILE\.claude\CLAUDE.md" "$Out\config\CLAUDE.md" -Force
+
+# Quét động mọi project của Claude Code thay vì hardcode một tên project.
+#
+# Bản trước chỉ chép 'C--Users-Cung---c-L--ng' nên bỏ sót toàn bộ memory của
+# 'C--Users-Cung---c-L--ng-Downloads'. Sau khi dời workspace sang C:\work sẽ còn
+# sinh thêm project mới nữa, hardcode là hỏng tiếp.
+#
+# Tách theo thư mục con vì mỗi project đều có MEMORY.md riêng — chép phẳng vào
+# cùng một chỗ thì chúng ghi đè lẫn nhau.
+$so_file_memory = 0
+Get-ChildItem -Path $Projects -Directory | ForEach-Object {
+  $thu_muc_memory = Join-Path $_.FullName 'memory'
+  if (Test-Path -LiteralPath $thu_muc_memory) {
+    $cac_file = @(Get-ChildItem -LiteralPath $thu_muc_memory -Filter '*.md' -File)
+    if ($cac_file.Count -gt 0) {
+      $dich = Join-Path "$Out\config\memory" $_.Name
+      $null = New-Item -ItemType Directory -Path $dich -Force
+      foreach ($f in $cac_file) { Copy-Item $f.FullName (Join-Path $dich $f.Name) -Force }
+      $so_file_memory += $cac_file.Count
+      Write-Host "  memory: $($_.Name)  ($($cac_file.Count) file)"
+    }
+  }
+}
+Write-Host "  Tong cong $so_file_memory file memory."
 
 # --- README -------------------------------------------------------------
 $rows = ($index | Sort-Object Date | ForEach-Object {
@@ -242,7 +265,8 @@ $rows
 - §transcripts/markdown/§ — bản dễ đọc, tool call và suy nghĩ gập trong thẻ §<details>§
 - §transcripts/jsonl/§ — bản gốc đầy đủ, mỗi dòng một message
 - §config/CLAUDE.md§ — hướng dẫn cá nhân áp dụng cho mọi project
-- §config/memory/§ — bộ nhớ dài hạn của Claude Code
+- §config/memory/<tên-project>/§ — bộ nhớ dài hạn của Claude Code, tách theo từng project
+  vì mỗi project có §MEMORY.md§ riêng
 - §scripts/§ — script PowerShell dựng repo này và các tiện ích liên quan
   (xem [§scripts/README.md§](scripts/README.md))
 

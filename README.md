@@ -23,6 +23,12 @@ Xuất ngày 08/09/2026.
 - `transcripts/jsonl/` — bản gốc đầy đủ, mỗi dòng một message
 - `config/CLAUDE.md` — hướng dẫn cá nhân áp dụng cho mọi project
 - `config/memory/` — bộ nhớ dài hạn của Claude Code
+- `scripts/` — script PowerShell dựng repo này và các tiện ích liên quan
+  (xem [`scripts/README.md`](scripts/README.md))
+
+> `transcripts/`, `config/`, `README.md` và `.gitignore` được **sinh tự động** bởi
+> `scripts/build-archive.ps1` — sửa tay ở đó sẽ mất khi chạy lại script.
+> `scripts/` và `.git/` không bị script đụng tới.
 
 ## Về bảo mật
 

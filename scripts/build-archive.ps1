@@ -269,10 +269,12 @@ $rows
   vì mỗi project có §MEMORY.md§ riêng
 - §scripts/§ — script PowerShell dựng repo này và các tiện ích liên quan
   (xem [§scripts/README.md§](scripts/README.md))
+- §workspace/§ — bản sao tài liệu mô tả cách tổ chức §C:\work§, vì các file đó không
+  thuộc repo nào ở chỗ gốc (xem [§workspace/README.md§](workspace/README.md))
 
 > §transcripts/§, §config/§, §README.md§ và §.gitignore§ được **sinh tự động** bởi
 > §scripts/build-archive.ps1§ — sửa tay ở đó sẽ mất khi chạy lại script.
-> §scripts/§ và §.git/§ không bị script đụng tới.
+> §scripts/§, §workspace/§ và §.git/§ không bị script đụng tới.
 
 ## Về bảo mật
 
